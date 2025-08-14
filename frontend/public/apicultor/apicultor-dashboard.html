@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Panel del Apicultor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="apicultor-dashboard.css" />
+    <script src="https://unpkg.com/lucide@0.363.0/dist/umd/lucide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="header">
+        <h1 class="h1">Panel del Apicultor</h1>
+        <div class="header__right">
+          <div class="user">
+            <i data-lucide="user" class="icon icon--sm text-muted"></i>
+            <span class="user__name">Nombre de Usuario</span>
+          </div>
+          <button id="logout-btn" class="btn btn-ghost" type="button">
+            <i data-lucide="log-out" class="icon icon--sm mr-8"></i>
+            Cerrar Sesión
+          </button>
+        </div>
+      </header>
+
+      <section class="section">
+        <h2 class="h2">Datos en Tiempo Real</h2>
+
+        <div class="cards-grid">
+    <div class="card">
+      <div class="card__body">
+        <h3 class="h3">Colmena</h3>
+        <div class="tiles-grid">
+          <div class="tile">
+            <div>
+              <p class="muted">Peso de la Colmena</p>
+              <p id="rt-weight" class="metric">-- kg</p>
+            </div>
+            <i data-lucide="scale" class="icon icon--lg text-green"></i>
+          </div>
+          <div class="tile">
+            <div>
+              <p class="muted">Temperatura Colmena</p>
+              <p id="rt-hive-temperature" class="metric">--°C</p>
+            </div>
+            <i data-lucide="thermometer" class="icon icon--lg text-orange"></i>
+          </div>
+          <div class="tile">
+            <div>
+              <p class="muted">Humedad Colmena</p>
+              <p id="rt-hive-humidity" class="metric">--%</p>
+            </div>
+            <i data-lucide="cloud-rain" class="icon icon--lg text-blue"></i>
+          </div>
+          <div class="tile">
+            <div>
+              <p class="muted">Actividad de Abejas</p>
+              <p id="rt-activity" class="metric">--</p>
+            </div>
+            <i data-lucide="activity" class="icon icon--lg text-yellow"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__body">
+        <h3 class="h3">Ambiente</h3>
+        <div class="tiles-grid">
+          <div class="tile">
+            <div>
+              <p class="muted">Temperatura</p>
+              <p id="rt-temperature" class="metric">--°C</p>
+            </div>
+            <i data-lucide="thermometer" class="icon icon--lg text-orange"></i>
+          </div>
+          <div class="tile">
+            <div>
+              <p class="muted">Humedad</p>
+              <p id="rt-humidity" class="metric">--%</p>
+            </div>
+            <i data-lucide="cloud-rain" class="icon icon--lg text-blue"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+      </section>
+
+      <section class="section">
+        <h2 class="h2">Alertas del Sistema</h2>
+        <div class="card">
+          <div class="card__body">
+            <ul id="alerts-list" class="stack-12"></ul>
+            <p id="alerts-empty" class="muted center hidden">No hay alertas activas.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="h2">Datos Históricos</h2>
+        <div class="card">
+          <div class="card__body">
+             Seleccion de periodos
+            <div class="btn-group" id="period-buttons">
+              <button data-period="day" class="btn btn-toggle" type="button">Día</button>
+              <button data-period="week" class="btn btn-toggle" type="button">Semana</button>
+              <button data-period="month" class="btn btn-toggle" type="button">Mes</button>
+              <button data-period="year" class="btn btn-toggle" type="button">Año</button>
+            </div>
+
+             Filters 
+            <div class="filters">
+              <h3 class="h4">Filtros Adicionales:</h3>
+
+              <div class="field">
+                <label for="source-select" class="label">Fuente de datos:</label>
+                <select id="source-select" class="select">
+                  <option value="exterior">Exterior</option>
+                  <option value="colmena">Colmena</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="start-date" class="label">Fecha Inicio:</label>
+                <input type="date" id="start-date" class="input" />
+              </div>
+
+              <div class="field">
+                <label for="end-date" class="label">Fecha Fin:</label>
+                <input type="date" id="end-date" class="input" />
+              </div>
+
+              <button id="apply-filters" class="btn btn-primary" type="button">Aplicar Filtros</button>
+            </div>
+
+            <div class="historic">
+              <div id="back-buttons" class="stack-8 hidden"></div>
+              <h3 id="historical-title" class="h4 mb-12">Datos Históricos</h3>
+              <div id="historical-content"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Scripts - IMPORTANTE: Cargar backend primero -->
+    <script src="apicultor-dashboard-api.js"></script>
+    <script src="apicultor-frontend.js"></script>
+  </body>
+</html>

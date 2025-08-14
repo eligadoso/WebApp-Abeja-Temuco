@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./index.css">
+    <title>SmartBee</title>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('loginForm');
+            const errorMessage = document.getElementById('errorMessage');
+
+            form.addEventListener('submit', (e) => {
+                const username = form.username.value.trim();
+                const password = form.password.value.trim();
+
+                if (!username || !password) {
+                    e.preventDefault();
+                    errorMessage.textContent = 'Debe ingresar nombre de usuario y clave';
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <header>
+        <h1>SmartBee</h1>
+    </header>
+
+    <main class="container">
+        <div class="image-placeholder"></div>
+
+        <div class="login-box">
+            <h2>Acceso</h2>
+            <form id="loginForm" action="/login" method="POST">
+                <div class="input-group">
+                    <span class="icon">🛡️</span>
+                    <input type="text" id="username" name="username" placeholder="Usuario" required />
+                </div>
+                <div class="input-group">
+                    <span class="icon">🔒</span>
+                    <input type="password" id="password" name="password" placeholder="Clave" required />
+                </div>
+                <div id="button-group">
+                    <button type="submit">Iniciar Sesión</button>
+                </div>
+                <div class="error-message" id="errorMessage"></div>
+            </form>
+        </div>
+    </main>
+    <script src="./js/main.js"></script>^</body>
+
+</html>

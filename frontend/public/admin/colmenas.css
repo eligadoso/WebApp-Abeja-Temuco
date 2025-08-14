@@ -1,0 +1,74 @@
+.registros-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.agregar-btn {
+    background-color: #ccc;
+    border: none;
+    color: #333;
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: 500;
+    z-index: 101;
+    margin-right: -10px;
+    border-radius: 4px 0 0 4px;
+    transition: background-color 0.2s;
+}
+
+.agregar-btn:hover {
+    background-color: #bbb;
+}
+
+.registros-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    background-color: #fff;
+    font-size: 0.95rem;
+}
+
+.registros-tabla th,
+.registros-tabla td {
+    border: 1px solid #ddd;
+    padding: 0.5rem 0.75rem;
+    text-align: center;
+}
+
+.registros-tablas thead {
+    background-color: #f1f1f1;
+    font-weight: 600;
+}
+
+
+.col-edicion {
+    width: 30px;
+    white-space: nowrap;
+    text-align: center;
+    padding: 0.25rem;
+}
+
+.editar-btn,
+.eliminar-btn {
+    font-size: 1rem;
+    padding: 0;
+    margin: 0 2px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    transition: transform 0.1s ease-in-out, color 0.1s;
+}
+
+.editar-btn:hover {
+    color: #007bff;
+    transform: scale(1.2);
+}
+
+.eliminar-btn:hover {
+    color: #c82333;
+    transform: scale(1.2);
+}

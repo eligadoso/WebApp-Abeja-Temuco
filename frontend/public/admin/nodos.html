@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./page.css">
+    <link rel="stylesheet" href="./usuarios.css">
+    <title>SmartBee</title>
+</head>
+
+<body>
+    <header>
+        <h1>SmartBee</h1>
+    </header>
+
+    <main class="container">
+        <aside class="sidebar">
+            <button id="botonUsuarios" class="tab-button" onclick="window.location.href='usuarios.html'">Usuarios</button>
+            <button id="botonColmenas" class="tab-button" onclick="window.location.href='colmenas.html'">Colmenas</button>
+            <button id="botonNodos" class="tab-button active">Nodos</button>
+            <button id="botonSalir" class="tab-button" onclick="window.location.href='../index.html'">Salir</button>
+        </aside>
+
+        <section class="content">
+            <div class="registros-header">
+                <h2>Administración de Nodos</h2>
+                <button class="agregar-btn" onclick="agregarRegistro()">➕ Agregar Usuario</button>
+            </div>
+
+            <table class="registros-tabla">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Ubicación</th>
+                        <th>Estado</th>
+                        <th class="col-edicion">Edición</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ambiental</td>
+                        <td>Descripción</td>
+                        <td>Chillán</td>
+                        <td>🟢</td>
+                        <td class="col-edicion">
+                            <button class="editar-btn">✏️</button>
+                            <button class="eliminar-btn">🗑️</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+
+</html>

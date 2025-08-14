@@ -1,0 +1,32 @@
+{ 
+  "type": "module", 
+  "name": "smartbee-unified", 
+  "version": "1.0.0", 
+  "description": "SmartBee WebApp Unificada", 
+  "main": "server.js", 
+  "scripts": { 
+    "start": "node server.js", 
+    "dev": "NODE_ENV=development MOCK_DATA=true node server.js", 
+    "prod": "NODE_ENV=production MOCK_DATA=false node server.js", 
+    "backend:dev": "cd backend ^&^& npm run dev", 
+    "frontend:dev": "cd frontend ^&^& npm run dev", 
+    "test": "echo \"Error: no test specified\" ^&^& exit 1" 
+  }, 
+  "dependencies": { 
+    "bcrypt": "^6.0.0", 
+    "cheerio": "^1.1.0", 
+    "express": "^5.1.0", 
+    "express-session": "^1.18.1", 
+    "mysql2": "^3.14.1", 
+    "uuid": "^11.1.0", 
+    "lodash": "^4.17.21", 
+    "moment": "^2.29.4", 
+    "joi": "^17.11.0" 
+  }, 
+  "devDependencies": { 
+    "nodemon": "^3.0.2" 
+  }, 
+  "engines": { 
+    "node": "^>=16.0.0" 
+  } 
+} 
