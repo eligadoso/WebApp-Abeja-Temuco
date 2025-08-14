@@ -256,6 +256,7 @@
       const state = DataController.getState();
       let html = "";
       
+      // Botones para vista anual
       if (state.selectedPeriod === "year" && (state.selectedMonthIndex !== null || state.selectedDayIndex !== null)) {
         if (state.selectedDayIndex !== null) {
           html += `<button id="btn-back-to-month" class="btn btn-toggle" type="button" style="animation: slideInFromLeft 0.3s ease;">&larr; Volver a la Vista Mensual</button>`;
@@ -263,13 +264,25 @@
         if (state.selectedMonthIndex !== null && state.selectedDayIndex === null) {
           html += `<button id="btn-back-to-year" class="btn btn-toggle" type="button" style="animation: slideInFromLeft 0.3s ease;">&larr; Volver a la Vista Anual</button>`;
         }
-        
+      }
+      // Botones para vista mensual
+      else if (state.selectedPeriod === "month" && state.selectedDayIndex !== null) {
+        html += `<button id="btn-back-to-month-list" class="btn btn-toggle" type="button" style="animation: slideInFromLeft 0.3s ease;">&larr; Volver a la Vista Mensual</button>`;
+      }
+      // Botones para vista semanal
+      else if (state.selectedPeriod === "week" && state.selectedDayIndex !== null) {
+        html += `<button id="btn-back-to-week-list" class="btn btn-toggle" type="button" style="animation: slideInFromLeft 0.3s ease;">&larr; Volver a la Vista Semanal</button>`;
+      }
+      
+      if (html) {
         container.innerHTML = html;
         UIUtils.removeClassWithAnimation(container, "hidden");
         
         // Configurar eventos
         const bMonth = document.getElementById("btn-back-to-month");
         const bYear = document.getElementById("btn-back-to-year");
+        const bMonthList = document.getElementById("btn-back-to-month-list");
+        const bWeekList = document.getElementById("btn-back-to-week-list");
         
         if (bMonth) {
           bMonth.addEventListener("click", () => {
@@ -283,6 +296,18 @@
               selectedMonthIndex: null, 
               selectedDayIndex: null 
             });
+            this.renderHistorical();
+          });
+        }
+        if (bMonthList) {
+          bMonthList.addEventListener("click", () => {
+            DataController.updateState({ selectedDayIndex: null });
+            this.renderHistorical();
+          });
+        }
+        if (bWeekList) {
+          bWeekList.addEventListener("click", () => {
+            DataController.updateState({ selectedDayIndex: null });
             this.renderHistorical();
           });
         }
@@ -491,12 +516,16 @@
      * @returns {string} HTML de la lista
      */
     renderDataList(records, state) {
+      if (!records || records.length === 0) {
+        return '<div class="list-item"><p class="muted center">No hay datos disponibles para este período</p></div>';
+      }
+      
       return records.map((record, index) => `
         <div class="list-item" style="animation: slideInFromBottom 0.2s ease ${index * 0.02}s both;">
           <p class="item-title">${UIUtils.escapeHtml(record.time || record.timestamp)}</p>
-          <p>Temperatura: <strong>${record.temperature}°C</strong></p>
-          <p>Humedad: <strong>${record.humidity}%</strong></p>
-          ${state.selectedSource === "colmena" ? `<p>Peso: <strong>${record.weight} kg</strong></p>` : ""}
+          <p>Temperatura: <strong>${record.temperature !== null ? record.temperature + '°C' : 'Sin datos'}</strong></p>
+          <p>Humedad: <strong>${record.humidity !== null ? record.humidity + '%' : 'Sin datos'}</strong></p>
+          ${state.selectedSource === "colmena" ? `<p>Peso: <strong>${record.weight !== null ? record.weight + ' kg' : 'Sin datos'}</strong></p>` : ""}
           <p>Actividad: <strong>${record.beeActivity}</strong></p>
         </div>
       `).join("");

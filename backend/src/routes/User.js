@@ -178,19 +178,19 @@ export default function userRouter(db) {
                 params.push(endDate);
             }
     
-            // Agregar condiciones de período
+            // Agregar condiciones de período con fechas más específicas
             switch (period) {
                 case 'day':
-                    conditions.push('nm.fecha >= DATE_SUB(NOW(), INTERVAL 1 DAY)');
+                    conditions.push('DATE(nm.fecha) = CURDATE()');
                     break;
                 case 'week':
-                    conditions.push('nm.fecha >= DATE_SUB(NOW(), INTERVAL 1 WEEK)');
+                    conditions.push('YEARWEEK(nm.fecha, 1) = YEARWEEK(CURDATE(), 1)');
                     break;
                 case 'month':
-                    conditions.push('nm.fecha >= DATE_SUB(NOW(), INTERVAL 1 MONTH)');
+                    conditions.push('YEAR(nm.fecha) = YEAR(CURDATE()) AND MONTH(nm.fecha) = MONTH(CURDATE())');
                     break;
                 case 'year':
-                    conditions.push('nm.fecha >= DATE_SUB(NOW(), INTERVAL 1 YEAR)');
+                    conditions.push('YEAR(nm.fecha) = YEAR(CURDATE())');
                     break;
             }
     
@@ -380,19 +380,27 @@ function processHistoricalData(rows, period) {
             payload = JSON.parse(row.payload);
         } catch (parseError) {
             Utils.logError(`Error parsing payload: ${parseError.message}`);
+            Utils.logError(`Payload problemático: ${row.payload}`);
         }
         
         return {
-            time: new Date(row.fecha).toLocaleString(), // Formatear fecha
-            timestamp: row.fecha, // Mantener timestamp original
-            temperature: payload.temperatura || payload.temperature || 0,
-            humidity: payload.humedad || payload.humidity || 0,
-            weight: payload.peso || payload.weight || 0,
-            beeActivity: payload.beeActivity || payload.actividad || 'Normal',
+            time: new Date(row.fecha).toLocaleString(),
+            timestamp: row.fecha,
+            temperature: parseFloat(payload.temperatura || payload.temperature) || null,
+            humidity: parseFloat(payload.humedad || payload.humidity) || null,
+            weight: parseFloat(payload.peso || payload.weight) || null,
+            beeActivity: payload.actividad || payload.beeActivity || 'Sin datos',
             colmena_id: row.colmena_id,
             estacion_id: row.estacion_id
         };
     });
+    
+    // Filtrar registros con datos válidos
+    const validRecords = records.filter(record => 
+        record.temperature !== null || 
+        record.humidity !== null || 
+        record.weight !== null
+    );
     
     // Devolver estructura que espera el frontend
     const result = {
@@ -405,19 +413,16 @@ function processHistoricalData(rows, period) {
     // Asignar datos según el período solicitado
     switch (period) {
         case 'day':
-            result.day.records = records;
+            result.day.records = validRecords;
             break;
         case 'week':
-            // Agrupar por días para la semana
-            result.week.dailyData = groupByDay(records);
+            result.week.dailyData = groupByDay(validRecords);
             break;
         case 'month':
-            // Agrupar por días para el mes
-            result.month.dailyData = groupByDay(records);
+            result.month.dailyData = groupByDay(validRecords);
             break;
         case 'year':
-            // Para año, agrupar por meses
-            result.year.monthlyData = groupByMonth(records);
+            result.year.monthlyData = groupByMonth(validRecords);
             break;
     }
     
@@ -430,11 +435,16 @@ function groupByDay(records) {
     
     records.forEach(record => {
         const date = new Date(record.timestamp);
-        const dayKey = date.toISOString().split('T')[0]; // YYYY-MM-DD
+        const dayKey = date.toISOString().split('T')[0];
         
         if (!days[dayKey]) {
             days[dayKey] = {
-                label: date.toLocaleDateString(),
+                label: date.toLocaleDateString('es-ES', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                }),
                 date: dayKey,
                 records: [],
                 averageTemperature: 0,
@@ -449,9 +459,19 @@ function groupByDay(records) {
     // Calcular promedios para cada día
     return Object.values(days).map(day => {
         const records = day.records;
-        day.averageTemperature = Math.round(records.reduce((sum, r) => sum + r.temperature, 0) / records.length * 10) / 10;
-        day.averageHumidity = Math.round(records.reduce((sum, r) => sum + r.humidity, 0) / records.length * 10) / 10;
-        day.averageWeight = Math.round(records.reduce((sum, r) => sum + r.weight, 0) / records.length * 10) / 10;
+        
+        // Filtrar valores válidos para cada métrica
+        const validTemps = records.filter(r => r.temperature !== null).map(r => r.temperature);
+        const validHumidity = records.filter(r => r.humidity !== null).map(r => r.humidity);
+        const validWeights = records.filter(r => r.weight !== null).map(r => r.weight);
+        
+        day.averageTemperature = validTemps.length > 0 ? 
+            Math.round(validTemps.reduce((sum, t) => sum + t, 0) / validTemps.length * 10) / 10 : 0;
+        day.averageHumidity = validHumidity.length > 0 ? 
+            Math.round(validHumidity.reduce((sum, h) => sum + h, 0) / validHumidity.length * 10) / 10 : 0;
+        day.averageWeight = validWeights.length > 0 ? 
+            Math.round(validWeights.reduce((sum, w) => sum + w, 0) / validWeights.length * 10) / 10 : 0;
+        
         return day;
     }).sort((a, b) => new Date(b.date) - new Date(a.date));
 }
