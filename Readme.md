@@ -136,30 +136,6 @@ NODE_ENV=development
 DEBUG=true
 ```
 
-### Paso 5: Crear Datos Iniciales
-
-#### 5.1 Usuario Administrador
-```sql
--- Conectar a la base de datos
-mysql -u smartbee_user -p smartbee
-
--- Insertar usuario administrador (la contraseña debe estar hasheada con bcrypt)
-INSERT INTO usuario (id, clave, rol, activo) VALUES 
-('admin', '$2b$10$hash_de_la_contraseña', 'ADM', 1);
-
--- Insertar usuario apicultor de prueba
-INSERT INTO usuario (id, clave, rol, activo) VALUES 
-('vrojas', '$2b$10$hash_de_la_contraseña', 'API', 1);
-```
-
-#### 5.2 Generar Hash de Contraseña
-```javascript
-// Script para generar hash (ejecutar en Node.js)
-const bcrypt = require('bcrypt');
-const password = 'tu_contraseña';
-const hash = bcrypt.hashSync(password, 10);
-console.log(hash);
-```
 
 ## 🚀 Ejecutar la Aplicación
 
@@ -274,4 +250,5 @@ SHOW PROCESSLIST;
 -- Verificar estado de tablas
 SHOW TABLE STATUS FROM smartbee;
 ```
+
 
