@@ -275,32 +275,3 @@ SHOW PROCESSLIST;
 SHOW TABLE STATUS FROM smartbee;
 ```
 
-## 🔄 Actualización
-
-```bash
-# Hacer backup de la base de datos
-mysqldump -u smartbee_user -p smartbee > backup_$(date +%Y%m%d).sql
-
-# Actualizar código
-git pull origin main
-
-# Actualizar dependencias
-npm update
-
-# Reiniciar aplicación
-npm start
-```
-
-## 📞 Soporte
-
-Si encuentras problemas durante la instalación:
-
-1. **Verificar prerrequisitos** - Todas las versiones correctas
-2. **Revisar logs** - Buscar mensajes de error específicos
-3. **Consultar documentación** - README.md y comentarios en código
-4. **Contactar soporte** - Con detalles del error y configuración
-
----
-
-**¡Instalación completada!** 🎉  
-Ahora puedes acceder a SmartBee en http://localhost:3000
